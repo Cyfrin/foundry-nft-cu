@@ -25,14 +25,8 @@ contract BasicNftTest is StdCheats, Test {
     }
 
     function testInitializedCorrectly() public view {
-        assert(
-            keccak256(abi.encodePacked(basicNft.name())) ==
-                keccak256(abi.encodePacked((NFT_NAME)))
-        );
-        assert(
-            keccak256(abi.encodePacked(basicNft.symbol())) ==
-                keccak256(abi.encodePacked((NFT_SYMBOL)))
-        );
+        assert(keccak256(abi.encodePacked(basicNft.name())) == keccak256(abi.encodePacked((NFT_NAME))));
+        assert(keccak256(abi.encodePacked(basicNft.symbol())) == keccak256(abi.encodePacked((NFT_SYMBOL))));
     }
 
     function testCanMintAndHaveABalance() public {
@@ -46,10 +40,7 @@ contract BasicNftTest is StdCheats, Test {
         vm.prank(USER);
         basicNft.mintNft(PUG_URI);
 
-        assert(
-            keccak256(abi.encodePacked(basicNft.tokenURI(0))) ==
-                keccak256(abi.encodePacked(PUG_URI))
-        );
+        assert(keccak256(abi.encodePacked(basicNft.tokenURI(0))) == keccak256(abi.encodePacked(PUG_URI)));
     }
 
     function testMintWithScript() public {

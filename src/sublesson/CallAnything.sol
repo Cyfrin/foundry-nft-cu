@@ -32,18 +32,12 @@ contract CallAnything {
         selector = bytes4(keccak256(bytes("transfer(address,uint256)")));
     }
 
-    function getDataToCallTransfer(
-        address someAddress,
-        uint256 amount
-    ) public pure returns (bytes memory) {
+    function getDataToCallTransfer(address someAddress, uint256 amount) public pure returns (bytes memory) {
         return abi.encodeWithSelector(getSelectorOne(), someAddress, amount);
     }
 
     // So... How can we use the selector to call our transfer function now then?
-    function callTransferFunctionDirectly(
-        address someAddress,
-        uint256 amount
-    ) public returns (bytes4, bool) {
+    function callTransferFunctionDirectly(address someAddress, uint256 amount) public returns (bytes4, bool) {
         (bool success, bytes memory returnData) = address(this).call(
             // getDataToCallTransfer(someAddress, amount);
             abi.encodeWithSelector(getSelectorOne(), someAddress, amount)
@@ -52,45 +46,22 @@ contract CallAnything {
     }
 
     // Using encodeWithSignature
-    function callTransferFunctionDirectlyTwo(
-        address someAddress,
-        uint256 amount
-    ) public returns (bytes4, bool) {
-        (bool success, bytes memory returnData) = address(this).call(
-            abi.encodeWithSignature(
-                "transfer(address,uint256)",
-                someAddress,
-                amount
-            )
-        );
+    function callTransferFunctionDirectlyTwo(address someAddress, uint256 amount) public returns (bytes4, bool) {
+        (bool success, bytes memory returnData) =
+            address(this).call(abi.encodeWithSignature("transfer(address,uint256)", someAddress, amount));
         return (bytes4(returnData), success);
     }
 
     // We can also get a function selector from data sent into the call
     function getSelectorTwo() public view returns (bytes4 selector) {
-        bytes memory functionCallData = abi.encodeWithSignature(
-            "transfer(address,uint256)",
-            address(this),
-            123
-        );
-        selector = bytes4(
-            bytes.concat(
-                functionCallData[0],
-                functionCallData[1],
-                functionCallData[2],
-                functionCallData[3]
-            )
-        );
+        bytes memory functionCallData = abi.encodeWithSignature("transfer(address,uint256)", address(this), 123);
+        selector =
+            bytes4(bytes.concat(functionCallData[0], functionCallData[1], functionCallData[2], functionCallData[3]));
     }
 
     // Another way to get data (hard coded)
     function getCallData() public view returns (bytes memory) {
-        return
-            abi.encodeWithSignature(
-                "transfer(address,uint256)",
-                address(this),
-                123
-            );
+        return abi.encodeWithSignature("transfer(address,uint256)", address(this), 123);
     }
 
     // Pass this:
@@ -100,9 +71,7 @@ contract CallAnything {
     // You can actually write code that resembles the opcodes using the assembly keyword!
     // This in-line assembly is called "Yul"
     // It's a best practice to use it as little as possible - only when you need to do something very VERY specific
-    function getSelectorThree(
-        bytes calldata functionCallData
-    ) public pure returns (bytes4 selector) {
+    function getSelectorThree(bytes calldata functionCallData) public pure returns (bytes4 selector) {
         // offset is a special attribute of calldata
         assembly {
             selector := calldataload(functionCallData.offset)
@@ -129,43 +98,23 @@ contract CallFunctionWithoutContract {
 
     // pass in 0xa9059cbb000000000000000000000000d7acd2a9fd159e69bb102a1ca21c9a3e3a5f771b000000000000000000000000000000000000000000000000000000000000007b
     // you could use this to change state
-    function callFunctionDirectly(
-        bytes calldata callData
-    ) public returns (bytes4, bool) {
-        (
-            bool success,
-            bytes memory returnData
-        ) = s_selectorsAndSignaturesAddress.call(
-                abi.encodeWithSignature("getSelectorThree(bytes)", callData)
-            );
+    function callFunctionDirectly(bytes calldata callData) public returns (bytes4, bool) {
+        (bool success, bytes memory returnData) =
+            s_selectorsAndSignaturesAddress.call(abi.encodeWithSignature("getSelectorThree(bytes)", callData));
         return (bytes4(returnData), success);
     }
 
     // with a staticcall, we can have this be a view function!
     function staticCallFunctionDirectly() public view returns (bytes4, bool) {
-        (
-            bool success,
-            bytes memory returnData
-        ) = s_selectorsAndSignaturesAddress.staticcall(
-                abi.encodeWithSignature("getSelectorOne()")
-            );
+        (bool success, bytes memory returnData) =
+            s_selectorsAndSignaturesAddress.staticcall(abi.encodeWithSignature("getSelectorOne()"));
         return (bytes4(returnData), success);
     }
 
-    function callTransferFunctionDirectlyThree(
-        address someAddress,
-        uint256 amount
-    ) public returns (bytes4, bool) {
-        (
-            bool success,
-            bytes memory returnData
-        ) = s_selectorsAndSignaturesAddress.call(
-                abi.encodeWithSignature(
-                    "transfer(address,uint256)",
-                    someAddress,
-                    amount
-                )
-            );
+    function callTransferFunctionDirectlyThree(address someAddress, uint256 amount) public returns (bytes4, bool) {
+        (bool success, bytes memory returnData) = s_selectorsAndSignaturesAddress.call(
+            abi.encodeWithSignature("transfer(address,uint256)", someAddress, amount)
+        );
         return (bytes4(returnData), success);
     }
 }

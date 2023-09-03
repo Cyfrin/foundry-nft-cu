@@ -43,10 +43,7 @@ contract MoodNft is ERC721, Ownable {
 
     event CreatedNFT(uint256 indexed tokenId);
 
-    constructor(
-        string memory sadSvgUri,
-        string memory happySvgUri
-    ) ERC721("Mood NFT", "MN") {
+    constructor(string memory sadSvgUri, string memory happySvgUri) ERC721("Mood NFT", "MN") {
         s_tokenCounter = 0;
         s_sadSvgUri = sadSvgUri;
         s_happySvgUri = happySvgUri;
@@ -54,9 +51,10 @@ contract MoodNft is ERC721, Ownable {
 
     function mintNft() public {
         // how would you require payment for this NFT?
-        _safeMint(msg.sender, s_tokenCounter);
+        uint256 _tokenCounter = s_tokenCounter;
+        _safeMint(msg.sender, _tokenCounter);
         s_tokenCounter = s_tokenCounter + 1;
-        emit CreatedNFT(s_tokenCounter);
+        emit CreatedNFT(_tokenCounter);
     }
 
     function flipMood(uint256 tokenId) public {
@@ -75,9 +73,7 @@ contract MoodNft is ERC721, Ownable {
         return "data:application/json;base64,";
     }
 
-    function tokenURI(
-        uint256 tokenId
-    ) public view virtual override returns (string memory) {
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         if (!_exists(tokenId)) {
             revert ERC721Metadata__URI_QueryFor_NonExistentToken();
         }
@@ -86,24 +82,23 @@ contract MoodNft is ERC721, Ownable {
         if (s_tokenIdToState[tokenId] == NFTState.SAD) {
             imageURI = s_sadSvgUri;
         }
-        return
-            string(
-                abi.encodePacked(
-                    _baseURI(),
-                    Base64.encode(
-                        bytes(
-                            abi.encodePacked(
-                                '{"name":"',
-                                name(), // You can add whatever name here
-                                '", "description":"An NFT that reflects the mood of the owner, 100% on Chain!", ',
-                                '"attributes": [{"trait_type": "moodiness", "value": 100}], "image":"',
-                                imageURI,
-                                '"}'
-                            )
+        return string(
+            abi.encodePacked(
+                _baseURI(),
+                Base64.encode(
+                    bytes(
+                        abi.encodePacked(
+                            '{"name":"',
+                            name(), // You can add whatever name here
+                            '", "description":"An NFT that reflects the mood of the owner, 100% on Chain!", ',
+                            '"attributes": [{"trait_type": "moodiness", "value": 100}], "image":"',
+                            imageURI,
+                            '"}'
                         )
                     )
                 )
-            );
+            )
+        );
     }
 
     function getHappySVG() public view returns (string memory) {

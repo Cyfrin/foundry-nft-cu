@@ -80,18 +80,12 @@ contract Encoding {
 
     // Gas: 24612
     function multiDecode() public pure returns (string memory, string memory) {
-        (string memory someString, string memory someOtherString) = abi.decode(
-            multiEncode(),
-            (string, string)
-        );
+        (string memory someString, string memory someOtherString) = abi.decode(multiEncode(), (string, string));
         return (someString, someOtherString);
     }
 
     function multiEncodePacked() public pure returns (bytes memory) {
-        bytes memory someString = abi.encodePacked(
-            "some string",
-            "it's bigger!"
-        );
+        bytes memory someString = abi.encodePacked("some string", "it's bigger!");
         return someString;
     }
 
@@ -132,7 +126,7 @@ contract Encoding {
     // for you. Flashback to when we withdrew ETH from our raffle:
 
     function withdraw(address recentWinner) public {
-        (bool success, ) = recentWinner.call{value: address(this).balance}("");
+        (bool success,) = recentWinner.call{value: address(this).balance}("");
         require(success, "Transfer Failed");
     }
 
