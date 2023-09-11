@@ -5,7 +5,6 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract BasicNft is ERC721 {
     error BasicNft__TokenUriNotFound();
-
     mapping(uint256 tokenId => string tokenUri) private s_tokenIdToUri;
     uint256 private s_tokenCounter;
 
@@ -19,7 +18,9 @@ contract BasicNft is ERC721 {
         s_tokenCounter = s_tokenCounter + 1;
     }
 
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    function tokenURI(
+        uint256 tokenId
+    ) public view override returns (string memory) {
         if (!_exists(tokenId)) {
             revert BasicNft__TokenUriNotFound();
         }

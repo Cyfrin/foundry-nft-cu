@@ -84,3 +84,4 @@ contract MoodNftTest is StdCheats, Test {
         assertEq(tokenId, currentAvailableTokenId);
     }
 }
+
