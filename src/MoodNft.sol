@@ -57,7 +57,7 @@ contract MoodNft is ERC721, Ownable {
         uint256 tokenCounter = s_tokenCounter;
         _safeMint(msg.sender, tokenCounter);
         s_tokenCounter = s_tokenCounter + 1;
-        emit CreatedNFT(_tokenCounter);
+        emit CreatedNFT(tokenCounter);
     }
 
     function flipMood(uint256 tokenId) public {
