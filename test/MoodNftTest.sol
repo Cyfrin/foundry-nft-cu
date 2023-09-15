@@ -5,6 +5,7 @@ pragma solidity ^0.8.19;
 import {DeployMoodNft} from "../script/DeployMoodNft.s.sol";
 import {MoodNft} from "../src/MoodNft.sol";
 import {Test, console} from "forge-std/Test.sol";
+import {Vm} from "forge-std/Vm.sol";
 import {StdCheats} from "forge-std/StdCheats.sol";
 import {MintBasicNft} from "../script/Interactions.s.sol";
 
@@ -68,4 +69,19 @@ contract MoodNftTest is StdCheats, Test {
                 keccak256(abi.encodePacked(SAD_MOOD_URI))
         );
     }
+
+    function testEventRecordsCorrectTokenIdOnMinting() public {
+        uint256 currentAvailableTokenId = moodNft.getTokenCounter();
+
+        vm.prank(USER);
+        vm.recordLogs();
+        moodNft.mintNft();
+        Vm.Log[] memory entries = vm.getRecordedLogs();
+
+        bytes32 tokenId_proto = entries[1].topics[1];
+        uint256 tokenId = uint256(tokenId_proto);
+
+        assertEq(tokenId, currentAvailableTokenId);
+    }
 }
+

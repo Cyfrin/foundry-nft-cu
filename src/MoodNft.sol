@@ -54,9 +54,10 @@ contract MoodNft is ERC721, Ownable {
 
     function mintNft() public {
         // how would you require payment for this NFT?
-        _safeMint(msg.sender, s_tokenCounter);
+        uint256 tokenCounter = s_tokenCounter;
+        _safeMint(msg.sender, tokenCounter);
         s_tokenCounter = s_tokenCounter + 1;
-        emit CreatedNFT(s_tokenCounter);
+        emit CreatedNFT(tokenCounter);
     }
 
     function flipMood(uint256 tokenId) public {
