@@ -39,7 +39,7 @@ contract DeployMoodNft is Script {
         // would return ""
         string memory baseURL = "data:image/svg+xml;base64,";
         string memory svgBase64Encoded = Base64.encode(
-            bytes(string(abi.encodePacked(svg)))
+            bytes(string(abi.encodePacked(svg))) // Removing unnecessary type castings, this line can be resumed as follows : 'abi.encodePacked(svg)'
         );
         return string(abi.encodePacked(baseURL, svgBase64Encoded));
     }
