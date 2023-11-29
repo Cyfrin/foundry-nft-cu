@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
+pragma solidity 0.8.20;
 
 // For the cheatsheet, check out the docs: https://docs.soliditylang.org/en/v0.8.13/cheatsheet.html?highlight=encodewithsignature
 
@@ -80,18 +80,12 @@ contract Encoding {
 
     // Gas: 24612
     function multiDecode() public pure returns (string memory, string memory) {
-        (string memory someString, string memory someOtherString) = abi.decode(
-            multiEncode(),
-            (string, string)
-        );
+        (string memory someString, string memory someOtherString) = abi.decode(multiEncode(), (string, string));
         return (someString, someOtherString);
     }
 
     function multiEncodePacked() public pure returns (bytes memory) {
-        bytes memory someString = abi.encodePacked(
-            "some string",
-            "it's bigger!"
-        );
+        bytes memory someString = abi.encodePacked("some string", "it's bigger!");
         return someString;
     }
 
@@ -132,7 +126,7 @@ contract Encoding {
     // for you. Flashback to when we withdrew ETH from our raffle:
 
     function withdraw(address recentWinner) public {
-        (bool success, ) = recentWinner.call{value: address(this).balance}("");
+        (bool success,) = recentWinner.call{value: address(this).balance}("");
         require(success, "Transfer Failed");
     }
 
