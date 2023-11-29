@@ -43,7 +43,7 @@ contract MoodNft is ERC721, Ownable {
 
     event CreatedNFT(uint256 indexed tokenId);
 
-    constructor(string memory sadSvgUri, string memory happySvgUri) ERC721("Mood NFT", "MN") {
+    constructor(string memory sadSvgUri, string memory happySvgUri) ERC721("Mood NFT", "MN") Ownable(msg.sender) {
         s_tokenCounter = 0;
         s_sadSvgUri = sadSvgUri;
         s_happySvgUri = happySvgUri;
@@ -58,7 +58,7 @@ contract MoodNft is ERC721, Ownable {
     }
 
     function flipMood(uint256 tokenId) public {
-        if (!_isApprovedOrOwner(msg.sender, tokenId)) {
+        if (getApproved(tokenId) != msg.sender && ownerOf(tokenId) != msg.sender) {
             revert MoodNft__CantFlipMoodIfNotOwner();
         }
 
@@ -74,7 +74,7 @@ contract MoodNft is ERC721, Ownable {
     }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-        if (!_exists(tokenId)) {
+        if (ownerOf(tokenId) == address(0)) {
             revert ERC721Metadata__URI_QueryFor_NonExistentToken();
         }
         string memory imageURI = s_happySvgUri;
