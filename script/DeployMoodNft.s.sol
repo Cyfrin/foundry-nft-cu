@@ -11,12 +11,6 @@ contract DeployMoodNft is Script {
     uint256 public deployerKey;
 
     function run() external returns (MoodNft) {
-        if (block.chainid == 31337) {
-            deployerKey = DEFAULT_ANVIL_PRIVATE_KEY;
-        } else {
-            deployerKey = vm.envUint("PRIVATE_KEY");
-        }
-
         string memory sadSvg = vm.readFile("./images/dynamicNft/sad.svg");
         string memory happySvg = vm.readFile("./images/dynamicNft/happy.svg");
 
