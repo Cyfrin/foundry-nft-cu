@@ -6,10 +6,11 @@ import {DeployMoodNft} from "../script/DeployMoodNft.s.sol";
 import {MoodNft} from "../src/MoodNft.sol";
 import {Test, console} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
-import {StdCheats} from "forge-std/StdCheats.sol";
 import {MintBasicNft} from "../script/Interactions.s.sol";
+import {ZkSyncChainChecker} from "lib/foundry-devops/src/ZkSyncChainChecker.sol";
+import {FoundryZkSyncChecker} from "lib/foundry-devops/src/FoundryZkSyncChecker.sol";
 
-contract MoodNftTest is StdCheats, Test {
+contract MoodNftTest is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
     string constant NFT_NAME = "Mood NFT";
     string constant NFT_SYMBOL = "MN";
     MoodNft public moodNft;
@@ -26,18 +27,18 @@ contract MoodNftTest is StdCheats, Test {
 
     function setUp() public {
         deployer = new DeployMoodNft();
-        moodNft = deployer.run();
+        if (!isZkSyncChain()) {
+            moodNft = deployer.run();
+        } else {
+            string memory sadSvg = vm.readFile("./images/dynamicNft/sad.svg");
+            string memory happySvg = vm.readFile("./images/dynamicNft/happy.svg");
+            moodNft = new MoodNft(deployer.svgToImageURI(sadSvg), deployer.svgToImageURI(happySvg));
+        }
     }
 
     function testInitializedCorrectly() public view {
-        assert(
-            keccak256(abi.encodePacked(moodNft.name())) ==
-                keccak256(abi.encodePacked((NFT_NAME)))
-        );
-        assert(
-            keccak256(abi.encodePacked(moodNft.symbol())) ==
-                keccak256(abi.encodePacked((NFT_SYMBOL)))
-        );
+        assert(keccak256(abi.encodePacked(moodNft.name())) == keccak256(abi.encodePacked((NFT_NAME))));
+        assert(keccak256(abi.encodePacked(moodNft.symbol())) == keccak256(abi.encodePacked((NFT_SYMBOL))));
     }
 
     function testCanMintAndHaveABalance() public {
@@ -51,10 +52,7 @@ contract MoodNftTest is StdCheats, Test {
         vm.prank(USER);
         moodNft.mintNft();
 
-        assert(
-            keccak256(abi.encodePacked(moodNft.tokenURI(0))) ==
-                keccak256(abi.encodePacked(HAPPY_MOOD_URI))
-        );
+        assert(keccak256(abi.encodePacked(moodNft.tokenURI(0))) == keccak256(abi.encodePacked(HAPPY_MOOD_URI)));
     }
 
     function testFlipTokenToSad() public {
@@ -64,13 +62,10 @@ contract MoodNftTest is StdCheats, Test {
         vm.prank(USER);
         moodNft.flipMood(0);
 
-        assert(
-            keccak256(abi.encodePacked(moodNft.tokenURI(0))) ==
-                keccak256(abi.encodePacked(SAD_MOOD_URI))
-        );
+        assert(keccak256(abi.encodePacked(moodNft.tokenURI(0))) == keccak256(abi.encodePacked(SAD_MOOD_URI)));
     }
 
-    function testEventRecordsCorrectTokenIdOnMinting() public {
+    function testEventRecordsCorrectTokenIdOnMinting() public onlyFoundryZkSync {
         uint256 currentAvailableTokenId = moodNft.getTokenCounter();
 
         vm.prank(USER);
@@ -84,4 +79,3 @@ contract MoodNftTest is StdCheats, Test {
         assertEq(tokenId, currentAvailableTokenId);
     }
 }
-
