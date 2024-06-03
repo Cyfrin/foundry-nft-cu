@@ -65,7 +65,8 @@ contract MoodNftTest is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
         assert(keccak256(abi.encodePacked(moodNft.tokenURI(0))) == keccak256(abi.encodePacked(SAD_MOOD_URI)));
     }
 
-    function testEventRecordsCorrectTokenIdOnMinting() public onlyFoundryZkSync {
+    // logging events doesn't work great in foundry-zksync
+    function testEventRecordsCorrectTokenIdOnMinting() public onlyVanillaFoundry {
         uint256 currentAvailableTokenId = moodNft.getTokenCounter();
 
         vm.prank(USER);
