@@ -50,8 +50,8 @@ We go through creating 2 different kinds of NFTs.
 ## Quickstart
 
 ```
-git clone https://github.com/Cyfrin/foundry-nft-f23
-cd foundry-nft-f23
+git clone https://github.com/Cyfrin/foundry-nft-cu
+cd foundry-nft-cu
 forge install
 forge build
 ```
@@ -60,7 +60,7 @@ forge build
 
 If you can't or don't want to run and install locally, you can work with this repo in Gitpod. If you do this, you can skip the `clone this repo` part.
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/PatrickAlphaC/foundry-foundry-nft-f23)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/PatrickAlphaC/foundry-foundry-nft-cu)
 
 # Usage
 
