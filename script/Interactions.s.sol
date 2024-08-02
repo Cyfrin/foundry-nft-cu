@@ -24,8 +24,8 @@ contract MintBasicNft is Script {
 
 contract MintMoodNft is Script {
     function run() external {
-        address mostRecentlyDeployedBasicNft = DevOpsTools.get_most_recent_deployment("MoodNft", block.chainid);
-        mintNftOnContract(mostRecentlyDeployedBasicNft);
+        address mostRecentlyDeployedMoodNft = DevOpsTools.get_most_recent_deployment("MoodNft", block.chainid);
+        mintNftOnContract(mostRecentlyDeployedMoodNft);
     }
 
     function mintNftOnContract(address moodNftAddress) public {
@@ -39,8 +39,8 @@ contract FlipMoodNft is Script {
     uint256 public constant TOKEN_ID_TO_FLIP = 0;
 
     function run() external {
-        address mostRecentlyDeployedBasicNft = DevOpsTools.get_most_recent_deployment("MoodNft", block.chainid);
-        flipMoodNft(mostRecentlyDeployedBasicNft);
+        address mostRecentlyDeployedMoodNft = DevOpsTools.get_most_recent_deployment("MoodNft", block.chainid);
+        flipMoodNft(mostRecentlyDeployedMoodNft);
     }
 
     function flipMoodNft(address moodNftAddress) public {
