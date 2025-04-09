@@ -18,7 +18,7 @@ contract Encoding {
     // creating a contract.
 
     // This bytecode represents exactly the low level computer instructions to make our contract happen.
-    // These low level instructions are spread out into soemthing call opcodes.
+    // These low level instructions are spread out into something called opcodes.
 
     // An opcode is going to be 2 characters that represents some special instruction, and also optionally has an input
 
