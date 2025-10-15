@@ -5,8 +5,8 @@ libs = ["lib"]
 fs_permissions = [
     { access = "read", path = "./images/" },
     { access = "read", path = "./broadcast" },
+    { access = "read", path = "./lib/forge-devops" }
 ]
-ffi = true
 
 remappings = ['@openzeppelin/contracts=lib/openzeppelin-contracts/contracts']
 
