@@ -28,6 +28,7 @@ contract BasicNftTest is Test, ZkSyncChainChecker {
         }
     }
 
+    //Comparing strings/bytes directly works fine with the newer versions of Foundry as it implicitly hashes all the data types under the hood
     function testInitializedCorrectly() public view {
         assert(keccak256(abi.encodePacked(basicNft.name())) == keccak256(abi.encodePacked((NFT_NAME))));
         assert(keccak256(abi.encodePacked(basicNft.symbol())) == keccak256(abi.encodePacked((NFT_SYMBOL))));
